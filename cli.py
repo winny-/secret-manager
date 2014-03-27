@@ -16,15 +16,30 @@ except NameError:
 
 
 def possible_matches(string):
-    l = []
-    last = ''
+    """
+    Return all possible prefix-matches to a string.
+
+    Example:
+    >>> possible_matches('yes')
+    ['y', 'ye', 'yes']
+    """
+    l, last = [], ''
     for c in string:
-        last = last + c
+        last += c
         l.append(last)
     return l
 
 
 def matches(target, string):
+    """
+    Determine if string prefix-matches target.
+
+    Example:
+    >>> matches('yes', 'ye')
+    True
+    >>> matches('yes', 'yep')
+    False
+    """
     if len(target) < len(string):
         return False
     possible_target = possible_matches(target)
@@ -39,6 +54,7 @@ def matches(target, string):
 
 
 def ask_yn(prompt):
+    """Ask Yes or No question."""
     valid_yes, valid_no = possible_matches('yes'), possible_matches('no')
     valid = valid_yes + valid_no
     response = ''
@@ -85,7 +101,7 @@ class CLI(object):
         verb, args = components[0], components[1:]
         resolved_verb = self._resolve_verb(verb)
         if resolved_verb is None:
-            self.verb_usage([])
+            self.verb_help([])
             return
         function = getattr(self, resolved_verb)
         function(args)
@@ -115,7 +131,8 @@ class CLI(object):
         self.secrets[name] = eval('\n'.join(values))
 
     def verb_list(self, args):
-        pprint(sorted(self.secrets.keys()))
+        for node in sorted(self.secrets.keys()):
+            print(node)
 
     def verb_exit(self, args):
         should_save = ask_yn('Save? ')
@@ -127,12 +144,12 @@ class CLI(object):
         with open(self.filename, 'wb') as f:
             save_vault(f, self.passphrase, self.secrets)
 
-    def verb_usage(self, args):
+    def verb_help(self, args):
         message = 'Verbs: ' + ' '.join(self.verbs)
         print(message)
 
 
-if __name__ == '__main__':
+def main():
     args = sys.argv[1:]
     if len(args) > 1:
         sys.stdout.write('Usage: {} [filename]'.format(sys.argv[0]))
@@ -143,3 +160,7 @@ if __name__ == '__main__':
         filename = None
     cli = CLI(filename=filename)
     cli.start()
+
+
+if __name__ == '__main__':
+    main()
