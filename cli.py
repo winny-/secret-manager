@@ -61,7 +61,8 @@ class CLI(object):
 
     @property
     def verbs(self):
-        return [verb.replace(self.VERB_PREFIX, '', 1) for verb in dir(self) if verb.startswith(self.VERB_PREFIX)]
+        return [verb.replace(self.VERB_PREFIX, '', 1) for verb in dir(self)
+                if verb.startswith(self.VERB_PREFIX)]
 
     def start(self):
         if self.filename is None:
@@ -100,7 +101,7 @@ class CLI(object):
 
     def verb_get(self, args):
         for node in args:
-            pprint(self.secrets[node])
+            pprint(self.secrets.get(node, 'Invalid node "{}"'.format(node)))
 
     def verb_set(self, args):
         if len(args) != 1:
@@ -114,7 +115,7 @@ class CLI(object):
         self.secrets[name] = eval('\n'.join(values))
 
     def verb_list(self, args):
-        pprint(self.secrets.keys())
+        pprint(sorted(self.secrets.keys()))
 
     def verb_exit(self, args):
         should_save = ask_yn('Save? ')
@@ -137,7 +138,7 @@ if __name__ == '__main__':
         sys.stdout.write('Usage: {} [filename]'.format(sys.argv[0]))
         exit(1)
     if len(args) == 1:
-        filename = args[1]
+        filename = args[0]
     else:
         filename = None
     cli = CLI(filename=filename)
