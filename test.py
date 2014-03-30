@@ -30,6 +30,16 @@ class Test(unittest.TestCase):
         self.assertEquals(decoded_secrets, self.secrets)
 
 
+    def test_Vault_class(self):
+        f = StringIO(self.vault)
+        vault = secret_manager.Vault()
+        vault.load(f, self.passphrase)
+        self.assertEquals(vault.vault, self.secrets)
+        vault.save()
+        vault.reload()
+        self.assertEquals(vault.vault, self.secrets)
+
+
 
 if __name__ == '__main__':
     unittest.main()
