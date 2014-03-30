@@ -1,4 +1,4 @@
-import secret_manager
+from .. import secret_manager
 import unittest
 from StringIO import StringIO
 
