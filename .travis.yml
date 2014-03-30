@@ -5,5 +5,5 @@ python:
 before_install: sudo apt-get update -qq
 install:
   - pip install -r requirements.txt
-  - sudo apt-get install -qq gpg
+  - sudo apt-get install -qq gnupg
 script: nosetests
