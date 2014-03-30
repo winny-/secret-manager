@@ -9,6 +9,6 @@ setup(
     author_email='winston@ml1.net',
     license='MIT',
     packages=['secret_manager'],
-    install_requires=['gnupg'],
+    install_requires=['python-gnupg'],
     test_suite='secret_manager.test',
     )
